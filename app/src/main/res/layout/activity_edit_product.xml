@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edit_book_name"
+        style="@style/EditForm"
+        android:hint="@string/hint_book_name"
+        android:inputType="textCapWords" />
+
+    <EditText
+        android:id="@+id/edit_book_price"
+        style="@style/EditForm"
+        android:hint="@string/hint_book_price"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/edit_book_quantity"
+        style="@style/EditForm"
+        android:hint="@string/hint_book_quantity"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/edit_book_supplier"
+        style="@style/EditForm"
+        android:hint="@string/hint_book_supplier"
+        android:inputType="textCapWords"/>
+
+    <EditText
+        android:id="@+id/edit_book_supplier_phone"
+        style="@style/EditForm"
+        android:hint="@string/hint_book_supplier_phone"
+        android:inputType="phone"/>
+
+
+</LinearLayout>
