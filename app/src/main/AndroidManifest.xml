@@ -36,7 +36,7 @@
         </activity>
 
         <provider
-            android:name="com.example.android.inventory.data.LibraryProvider"
+            android:name="com.example.android.inventory.data.InventoryProvider"
             android:authorities="com.example.android.inventory"
             android:exported="false" />
     </application>

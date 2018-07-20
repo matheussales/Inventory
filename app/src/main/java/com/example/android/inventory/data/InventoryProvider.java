@@ -9,14 +9,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.android.inventory.data.LibraryContract.LibraryEntry;
+import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 
-public class LibraryProvider extends ContentProvider {
+public class InventoryProvider extends ContentProvider {
 
-    private LibraryDbHelper mDbHelper;
+    private InventoryDbHelper mDbHelper;
 
-    public static final String LOG_TAG = LibraryProvider.class.getSimpleName();
+    public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
     private static final int LIBRARY = 100;
 
@@ -26,13 +26,13 @@ public class LibraryProvider extends ContentProvider {
 
     static {
 
-        sUriMatcher.addURI(LibraryContract.CONTENT_AUTHORITY, LibraryContract.PATH_LIBRARY, LIBRARY);
-        sUriMatcher.addURI(LibraryContract.CONTENT_AUTHORITY, LibraryContract.PATH_LIBRARY + "/#", LIBRARY_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, LIBRARY);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", LIBRARY_ID);
     }
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new LibraryDbHelper(getContext());
+        mDbHelper = new InventoryDbHelper(getContext());
 
         return true;
     }
@@ -48,14 +48,14 @@ public class LibraryProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case LIBRARY:
-                cursor = database.query(LibraryContract.LibraryEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case LIBRARY_ID:
-                selection = LibraryContract.LibraryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
-                cursor = database.query(LibraryContract.LibraryEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -71,42 +71,42 @@ public class LibraryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case LIBRARY:
-                return insertBook(uri, contentValues);
+                return insertProduct(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
 
-    private Uri insertBook(Uri uri, ContentValues values) {
+    private Uri insertProduct(Uri uri, ContentValues values) {
 
-        String name = values.getAsString(LibraryEntry.COLUMN_LIBRARY_NAME);
+        String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Book requires a name");
+            throw new IllegalArgumentException("Product requires a name");
         }
 
-        Double price = values.getAsDouble(LibraryEntry.COLUMN_LIBRARY_PRICE);
+        Double price = values.getAsDouble(InventoryEntry.COLUMN_PRODUCT_PRICE);
         if (price < 0 && price == null) {
-            throw new IllegalArgumentException("Book requires a valid price");
+            throw new IllegalArgumentException("Product requires a valid price");
         }
 
-        Integer quantity = values.getAsInteger(LibraryEntry.COLUMN_LIBRARY_QUANTITY);
+        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity < 0 && quantity == null) {
-            throw new IllegalArgumentException("Book requires a valid quantity");
+            throw new IllegalArgumentException("Product requires a valid quantity");
         }
 
-        String supplier = values.getAsString(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME);
+        String supplier = values.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
         if (supplier == null || supplier.isEmpty()) {
-            throw new IllegalArgumentException("Book requires a supplier");
+            throw new IllegalArgumentException("Product requires a supplier");
         }
 
-        Integer supplierPhone = values.getAsInteger(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER);
+        Integer supplierPhone = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
         if (supplierPhone < 0 && supplierPhone == null) {
-            throw new IllegalArgumentException("Book requires a valid supplier phone number");
+            throw new IllegalArgumentException("Product requires a valid supplier phone number");
         }
 
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
-        long id = database.insert(LibraryEntry.TABLE_NAME, null, values);
+        long id = database.insert(InventoryEntry.TABLE_NAME, null, values);
 
         if (id == -1){
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
@@ -127,7 +127,7 @@ public class LibraryProvider extends ContentProvider {
                 return updatePet(uri, contentValues, selection, selectionArgs);
             case LIBRARY_ID:
 
-                selection = LibraryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updatePet(uri, contentValues, selection, selectionArgs);
             default:
@@ -137,38 +137,38 @@ public class LibraryProvider extends ContentProvider {
 
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        if (values.containsKey(LibraryEntry.COLUMN_LIBRARY_NAME)) {
-            String name = values.getAsString(LibraryEntry.COLUMN_LIBRARY_NAME);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_NAME)) {
+            String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Book requires a name");
+                throw new IllegalArgumentException("Product requires a name");
             }
         }
 
-        if (values.containsKey(LibraryEntry.COLUMN_LIBRARY_PRICE)) {
-            Double price = values.getAsDouble(LibraryEntry.COLUMN_LIBRARY_PRICE);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_PRICE)) {
+            Double price = values.getAsDouble(InventoryEntry.COLUMN_PRODUCT_PRICE);
             if (price < 0 && price == null) {
-                throw new IllegalArgumentException("Book requires a valid price");
+                throw new IllegalArgumentException("Product requires a valid price");
             }
         }
 
-        if (values.containsKey(LibraryEntry.COLUMN_LIBRARY_QUANTITY)) {
-            Integer quantity = values.getAsInteger(LibraryEntry.COLUMN_LIBRARY_QUANTITY);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_QUANTITY)) {
+            Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity < 0 && quantity == null) {
-                throw new IllegalArgumentException("Book requires a valid quantity");
+                throw new IllegalArgumentException("Product requires a valid quantity");
             }
         }
 
-        if (values.containsKey(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME)) {
-            String supplier = values.getAsString(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME)) {
+            String supplier = values.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
             if (supplier == null) {
-                throw new IllegalArgumentException("Book requires a supplier");
+                throw new IllegalArgumentException("Product requires a supplier");
             }
         }
 
-        if (values.containsKey(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER)) {
-            Integer supplierPhone = values.getAsInteger(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER)) {
+            Integer supplierPhone = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
             if (supplierPhone < 0 && supplierPhone == null) {
-                throw new IllegalArgumentException("Book requires a valid supplier phone number");
+                throw new IllegalArgumentException("Product requires a valid supplier phone number");
             }
         }
 
@@ -177,7 +177,7 @@ public class LibraryProvider extends ContentProvider {
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        int rowsUpdated = database.update(LibraryEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
 
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -194,7 +194,7 @@ public class LibraryProvider extends ContentProvider {
         switch (match) {
             case LIBRARY:
 
-                rowsDeleted= database.delete(LibraryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
 
                 if (rowsDeleted != 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
@@ -203,10 +203,10 @@ public class LibraryProvider extends ContentProvider {
                 return rowsDeleted;
             case LIBRARY_ID:
 
-                selection = LibraryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
-                rowsDeleted = database.delete(LibraryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
 
                 if (rowsDeleted != 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
@@ -223,9 +223,9 @@ public class LibraryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case LIBRARY:
-                return LibraryEntry.CONTENT_LIST_TYPE;
+                return InventoryEntry.CONTENT_LIST_TYPE;
             case LIBRARY_ID:
-                return LibraryEntry.CONTENT_ITEM_TYPE;
+                return InventoryEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }

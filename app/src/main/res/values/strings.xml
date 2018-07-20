@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Library</string>
+    <string name="app_name">Inventory</string>
     <string name="title_activity_info_product">Info Product</string>
     <string name="title_activity_add_product">Add Product</string>
     <string name="title_activity_edit_product">Edit Product</string>

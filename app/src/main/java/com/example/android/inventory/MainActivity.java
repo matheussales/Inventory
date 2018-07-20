@@ -14,11 +14,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.android.inventory.data.LibraryContract.LibraryEntry;
+import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private LibraryCursorAdapter mAdapter;
+    private InventoryCursorAdapter mAdapter;
     private static final int LOADER = 0;
     private ListView list;
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, InfoProductActivity.class);
 
-                Uri uri = ContentUris.withAppendedId(LibraryEntry.CONTENT_URI, id);
+                Uri uri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(uri);
                 startActivity(intent);
             }
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        mAdapter = new LibraryCursorAdapter(this, null);
+        mAdapter = new InventoryCursorAdapter(this, null);
         list.setAdapter(mAdapter);
 
         getLoaderManager().initLoader(LOADER, null, this);
@@ -64,14 +64,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader onCreateLoader(int id, Bundle args) {
 
         String[] projection = {
-                LibraryEntry._ID,
-                LibraryEntry.COLUMN_LIBRARY_NAME,
-                LibraryEntry.COLUMN_LIBRARY_PRICE,
-                LibraryEntry.COLUMN_LIBRARY_QUANTITY
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY
         };
 
         return new CursorLoader(this,
-                LibraryEntry.CONTENT_URI,
+                InventoryEntry.CONTENT_URI,
                 projection,
                 null,
                 null,

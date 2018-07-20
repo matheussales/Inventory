@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.inventory.data.LibraryContract.LibraryEntry;
+import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 import java.text.NumberFormat;
 
@@ -106,7 +106,7 @@ public class InfoProductActivity extends AppCompatActivity implements LoaderMana
 
         if (quantity >= 0) {
             ContentValues values = new ContentValues();
-            values.put(LibraryEntry.COLUMN_LIBRARY_QUANTITY, quantity);
+            values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
 
             getContentResolver().update(mUri, values, null, null);
         } else {
@@ -119,7 +119,7 @@ public class InfoProductActivity extends AppCompatActivity implements LoaderMana
         int quantity = Integer.parseInt(quantityString) + 1;
 
         ContentValues values = new ContentValues();
-        values.put(LibraryEntry.COLUMN_LIBRARY_QUANTITY, quantity);
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
 
         getContentResolver().update(mUri, values, null, null);
     }
@@ -184,12 +184,12 @@ public class InfoProductActivity extends AppCompatActivity implements LoaderMana
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {
-                LibraryEntry._ID,
-                LibraryEntry.COLUMN_LIBRARY_NAME,
-                LibraryEntry.COLUMN_LIBRARY_PRICE,
-                LibraryEntry.COLUMN_LIBRARY_QUANTITY,
-                LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME,
-                LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER};
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME,
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER};
 
         return new CursorLoader(
                 this,
@@ -204,11 +204,11 @@ public class InfoProductActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor.moveToFirst()) {
-            int nameColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER);
+            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+            int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
 
             String name = cursor.getString(nameColumnIndex);
             Double price = cursor.getDouble(priceColumnIndex);

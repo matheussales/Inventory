@@ -13,13 +13,13 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.inventory.data.LibraryContract.LibraryEntry;
+import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 import java.text.NumberFormat;
 
-public class LibraryCursorAdapter extends CursorAdapter {
+public class InventoryCursorAdapter extends CursorAdapter {
 
-    public LibraryCursorAdapter(Context context, Cursor c) {
+    public InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
@@ -38,9 +38,9 @@ public class LibraryCursorAdapter extends CursorAdapter {
         mPriceTextView = view.findViewById(R.id.book_price);
         mQuantityTextView = view.findViewById(R.id.book_quantity);
 
-        int nameColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_NAME);
-        int priceColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_PRICE);
-        final int quantityColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_QUANTITY);
+        int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+        int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+        final int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
 
         String name = cursor.getString(nameColumnIndex);
         Double price = cursor.getDouble(priceColumnIndex);
@@ -61,7 +61,7 @@ public class LibraryCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 cursor.moveToPosition(position);
 
-                int idColumnIndex = cursor.getColumnIndex(LibraryEntry._ID);
+                int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
                 int _id = cursor.getInt(idColumnIndex);
 
                 int quantity = cursor.getInt(quantityColumnIndex);
@@ -69,10 +69,10 @@ public class LibraryCursorAdapter extends CursorAdapter {
                 int newQuantity = quantity - 1;
 
                 if (newQuantity >= 0) {
-                    Uri uri = ContentUris.withAppendedId(LibraryEntry.CONTENT_URI, _id);
+                    Uri uri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, _id);
 
                     ContentValues values = new ContentValues();
-                    values.put(LibraryEntry.COLUMN_LIBRARY_QUANTITY, newQuantity);
+                    values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, newQuantity);
 
                     context.getContentResolver().update(uri, values, null, null);
                 } else {

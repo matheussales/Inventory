@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.android.inventory.data.LibraryContract.LibraryEntry;
+import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 public class EditProductActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -81,11 +81,11 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
 
         ContentValues values = new ContentValues();
 
-        values.put(LibraryEntry.COLUMN_LIBRARY_NAME, nameString);
-        values.put(LibraryEntry.COLUMN_LIBRARY_PRICE, priceString);
-        values.put(LibraryEntry.COLUMN_LIBRARY_QUANTITY, quanitityString);
-        values.put(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME, supplierString);
-        values.put(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
+        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, nameString);
+        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, priceString);
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quanitityString);
+        values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierString);
+        values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
 
         if (mUri == null &&
                 TextUtils.isEmpty(nameString) &&
@@ -116,7 +116,7 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
             }
         } else {
             try {
-                Uri newUri = getContentResolver().insert(LibraryEntry.CONTENT_URI, values);
+                Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
                 if (newUri == null) {
                     Toast.makeText(this, getString(R.string.editor_insert_product_failed),
@@ -136,12 +136,12 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {
-                LibraryEntry._ID,
-                LibraryEntry.COLUMN_LIBRARY_NAME,
-                LibraryEntry.COLUMN_LIBRARY_PRICE,
-                LibraryEntry.COLUMN_LIBRARY_QUANTITY,
-                LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME,
-                LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER};
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME,
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER};
 
         return new CursorLoader(
                 this,
@@ -157,11 +157,11 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
         if (cursor.moveToFirst()) {
-            int nameColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(LibraryEntry.COLUMN_LIBRARY_SUPPLIER_PHONE_NUMBER);
+            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+            int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
 
             String name = cursor.getString(nameColumnIndex);
             String price = cursor.getString(priceColumnIndex);
