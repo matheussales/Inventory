@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/edit_book_name"
         style="@style/EditForm"
         android:hint="@string/hint_book_name"
-        android:inputType="textCapWords" />
+        android:inputType="textCapWords"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edit_book_price"
         style="@style/EditForm"
         android:hint="@string/hint_book_price"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_name" />
 
     <EditText
         android:id="@+id/edit_book_quantity"
         style="@style/EditForm"
         android:hint="@string/hint_book_quantity"
-        android:inputType="number" />
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_price" />
 
     <EditText
         android:id="@+id/edit_book_supplier"
         style="@style/EditForm"
         android:hint="@string/hint_book_supplier"
-        android:inputType="textCapWords"/>
+        android:inputType="textCapWords"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_quantity" />
 
     <EditText
         android:id="@+id/edit_book_supplier_phone"
         style="@style/EditForm"
         android:hint="@string/hint_book_supplier_phone"
-        android:inputType="phone"/>
+        android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_supplier" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
