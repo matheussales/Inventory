@@ -10,17 +10,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private InventoryCursorAdapter mAdapter;
+    private InvetoryListAdapter mAdapter;
     private static final int LOADER = 0;
-    private ListView list;
+    private RecyclerView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +32,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         FloatingActionButton insertButton = findViewById(R.id.insert_button);
         list = findViewById(R.id.list);
 
-        View emptyView = findViewById(R.id.empty_view);
-        list.setEmptyView(emptyView);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, InfoProductActivity.class);
-
-                Uri uri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        });
+//        View emptyView = findViewById(R.id.empty_view);
+//        list.setEmptyView(emptyView);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
 
@@ -54,8 +45,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        mAdapter = new InventoryCursorAdapter(this, null);
+        mAdapter = new InvetoryListAdapter(this, null);
         list.setAdapter(mAdapter);
+        list.setLayoutManager(new LinearLayoutManager(this));
+
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(Cursor cursor) {
+                long id = cursor.getLong(cursor.getColumnIndex(InventoryEntry._ID));
+                Intent intent = new Intent(MainActivity.this, InfoProductActivity.class);
+
+                Uri uri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
 
         getLoaderManager().initLoader(LOADER, null, this);
     }
@@ -70,12 +75,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryEntry.COLUMN_PRODUCT_QUANTITY
         };
 
+        String sql_order = InventoryEntry._ID + " DESC";
+
         return new CursorLoader(this,
                 InventoryEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
-                null
+                sql_order
         );
     }
 
