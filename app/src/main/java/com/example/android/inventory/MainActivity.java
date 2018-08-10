@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         FloatingActionButton insertButton = findViewById(R.id.insert_button);
         list = findViewById(R.id.list);
-
 
 //        View emptyView = findViewById(R.id.empty_view);
 //        list.setEmptyView(emptyView);
@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new InventoryItemTouchHelperCallback(this, mAdapter));
+        itemTouchHelper.attachToRecyclerView(list);
 
         getLoaderManager().initLoader(LOADER, null, this);
     }
